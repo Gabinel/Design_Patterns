@@ -41,7 +41,7 @@ class Game():
      _#/|##########/\######(       )######/\##########|\#_\n\n
               ''')
 
-        while self.party.party[0].character.hp > 0 and self.enemy.hp > 0:
+        while self.party.party[0].character.hp > 0 and self.party.party[1].character.hp > 0 and self.party.party[2].character.hp > 0 and self.enemy.hp > 0:
             print("=== MENU ===")
             print("1. Attack")
             print("2. Heal")
@@ -65,8 +65,9 @@ class Game():
                     
                     elif choice == '3':
                         print()
-                        if(not self.party.special(self.enemy)):
-                            choice = 0
+                        if(self.party.special(self.enemy) == 0):
+                            choice = '0'
+                        else:
                             break
 
                     elif choice == '4':

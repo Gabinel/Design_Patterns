@@ -22,8 +22,10 @@ class Player(Character):
             answer = character.special(target)
             print(answer)
 
-            if 'Not enough mana!' in answer:
+            if answer.startswith('Not enough mana!'):
                 return 0
+        
+        return 1
 
     # -- Métodos de acesso da lista --
     # Adiciona um personagem à party

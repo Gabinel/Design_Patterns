@@ -19,7 +19,7 @@ class Enemy(Character):
                 if self.specialPower:
                     print('/////  NOW SUFFER FOR YOUR FOOLISH AMBITIONS!  /////\n')
 
-                    damagePoints *= 2
+                    damagePoints *= 3
                     self.specialPower = False
                     self.mana -= 40
                     
@@ -45,7 +45,7 @@ class Enemy(Character):
     def special(self, target=0):
         if self.mana >= 100:
             self.mana = 0
-            # Especial do dragão: dobra seu dano por uma rodada
+            # Especial do dragão: triplica seu dano por uma rodada
             self.specialPower = True
         
         return f'The dragon communes with its inner greed, and will cause doubled damage in its next attack!'
