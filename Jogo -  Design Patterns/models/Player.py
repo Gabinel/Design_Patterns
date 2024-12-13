@@ -1,4 +1,4 @@
-from models.Characters import Character
+from models.Characters.Character import Character
 
 # Classe composite (contém os personagens do jogo)
 class Player(Character):
@@ -9,17 +9,21 @@ class Player(Character):
     # Todos os personagens da party atacam
     def attack(self, target: Character):
         for character in self.party:
-            character.attack(target)
+            print(character.attack(target))
 
     # Todos os personagens se curam
     def heal(self):
         for character in self.party:
-            character.heal()
+            print(character.heal())
 
     # Todos usam o poder especial
-    def special(self, target: Character):
+    def special(self, target: Character=0):
         for character in self.party:
-            character.special(target)
+            answer = character.special(target)
+            print(answer)
+
+            if 'Not enough mana!' in answer:
+                return 0
 
     # -- Métodos de acesso da lista --
     # Adiciona um personagem à party

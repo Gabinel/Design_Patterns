@@ -1,20 +1,23 @@
-from models.Characters import Character
+from models.Characters.Character import Character
+from models.Weapon import Weapon
 import random
 
 class Cleric(Character):
     
-    def __init__(self, hp: int, damage: int, armor: int, mana: int):
-        super().__init__(self, hp, damage, armor, mana)
-        self.weapon = "Divine sunlight"
+    def __init__(self, hp: int, damage: int, armor: int):
+        super().__init__(hp, damage, armor)
+        self.weapon = Weapon()
 
     def attack(self, target: Character) -> str:
         # Calcula o dano causado
         damagePoints = (self.damage - target.armor)
-        # Diminui a vida do personagem se o dano for > 0 e se o alvo tiver vida suficiente
-        target.hp = target.hp - damagePoints if not damagePoints else target.hp if (target.hp - damagePoints) > 0 else 0
+
+        self.weapon.attack(damagePoints, target)
+
+        self.mana += 20
 
         return f'''
-              Cleric burned {target.__name__} with {self.weapon}, dealing {damagePoints} damage!\n
+              Cleric burned the Dragon with Divine Sunlight, dealing {damagePoints} damage!\n
               Target life is {target.hp} now.
               '''
         
@@ -24,15 +27,18 @@ class Cleric(Character):
         if self.hp > 100:
             self.hp = 100
 
-        return f'Cleric asked for divine help and healed to {self.hp} hp!'
+        self.mana += 20
+
+        return f'''Cleric asked for divine help and healed to {self.hp} hp!'''
 
     def special(self, target=0) -> str:
-        if self.mana == 100:
+        if self.mana >= 100:
+            self.mana = 0
             # Especial do clérigo: se cura muito
             self.hp += random.randint(20, 30)
             if self.hp > 100:
                 self.hp = 100
         
-            return f'Cleric achieved her godess greatest interest, and healed an extreme amount of hp, reaching to {self.hp}!'
+            return f'''Cleric achieved her godess greatest interest, and healed an extreme amount of hp, reaching to {self.hp}!'''
         else:
             return f'Not enough mana! You got only {self.mana} points'

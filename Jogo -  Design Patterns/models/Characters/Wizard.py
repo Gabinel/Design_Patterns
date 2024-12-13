@@ -1,12 +1,12 @@
-from models.Characters import Character, Weapon
+from models.Characters.Character import Character
+from models.Weapon import Weapon
 import random
 
 class Wizard(Character):
     
-    def __init__(self, hp: int, damage: int, armor: int, weapon: Weapon):
-        super().__init__(self, hp, damage, armor)
-        self.weapon = weapon
-        self.weaponName = 'Fire Ball'
+    def __init__(self, hp: int, damage: int, armor: int):
+        super().__init__(hp, damage, armor)
+        self.weapon = Weapon()
 
     def attack(self, target: Character) -> str:
         # Calcula o dano causado
@@ -14,8 +14,10 @@ class Wizard(Character):
 
         self.weapon.attack(damagePoints, target)
 
+        self.mana += 20
+
         return f'''
-              Wizard cast a spell on {target.__name__} with {self.weaponName}, dealing {damagePoints} damage!\n
+              Wizard cast a spell on the Dragon using his great staff, dealing {damagePoints} damage!\n
               Target life is {target.hp} now.
               '''
         
@@ -25,13 +27,16 @@ class Wizard(Character):
         if self.hp > 100:
             self.hp = 100
 
+        self.mana += 20
+
         return f'The Wizard recalls his knowledges in search of a healing spell, and successfully heals to {self.hp} hp!'
 
     def special(self, target: Character) -> str:
-        if self.mana == 100:
+        if self.mana >= 100:
+            self.mana = 0
             damagePoints = 30
 
             self.weapon.attack(damagePoints, target)
-            return f'The Wizard communes with the higher planes, and summons a giant Fire Ball, that causes enormous {damagePoints} damage!'
+            return f'''The Wizard communes with the higher planes, and summons a giant Fire Ball, that causes enormous {damagePoints} damage!'''
         else:
             return f'Not enough mana! You got only {self.mana} points'

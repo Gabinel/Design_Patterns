@@ -1,34 +1,51 @@
-from models import Character
+from models.Characters.Character import Character
+from models.Weapon import Weapon
 import random
 
-class Cleric(Character):
+class Enemy(Character):
     
-    def __init__(self, hp, damage, armor):
-        super().__init__(self, hp, damage, armor)
-        self.weapon = "Divine sunlight"
+    def __init__(self, hp: int, damage: int, armor: int):
+        super().__init__(hp, damage, armor)
+        self.weapon = Weapon()
+        self.specialPower = False
+        self.mana = 0
 
     def attack(self, target: Character):
-        # Calcula o dano causado
-        damage = (self.attack - target.armor)
-        # Diminui a vida do personagem se o dano for > 0 e se o alvo tiver vida suficiente
-        target.hp = target.hp - damage if not damage else target.hp if (target.hp - damage) > 0 else 0
 
-        print(f'''
-              Cleric burned {target.__name__} with {self.weapon}, dealing {damage} damage!\n
-              Target life is {target.hp} now
-              ''')
+        for character in target.party:
+                # Calcula o dano causado
+                damagePoints = (self.damage - character.character.armor)
+                
+                if self.specialPower:
+                    print('/////  NOW SUFFER FOR YOUR FOOLISH AMBITIONS!  /////\n')
+
+                    damagePoints *= 2
+                    self.specialPower = False
+                    self.mana -= 40
+                    
+                self.weapon.attack(damagePoints, character.character)
+
+        self.mana += 40
+
+        return f'''
+              Smaug burned your party to the ground, dealing {damagePoints} damage!\n
+              Party life is {[character.character.hp for character in target.party]} now
+              '''
         
     def heal(self):
-        # Se cura num intervalo inteiro de 3 a 10
-        self.hp += random.randint(3,10)
-        if self.hp > 100:
-            self.hp = 100
+        # Se cura num intervalo inteiro de 5 a 10
+        self.hp += random.randint(5,10)
+        if self.hp > 200:
+            self.hp = 200
 
-        print(f'Cleric asked for divine help and healed to {self.hp} hp!')
+        self.mana += 40
 
-    def special(self):
-        self.hp += random.randint(20, 30)
-        if self.hp > 100:
-            self.hp = 100
+        return f'The mighty dragon licked his wounds, healing to {self.hp} hp!'
+
+    def special(self, target=0):
+        if self.mana >= 100:
+            self.mana = 0
+            # Especial do dragão: dobra seu dano por uma rodada
+            self.specialPower = True
         
-        print(f'Cleric achieved her godess greatest interest, and healed an extreme amount of hp, reaching to {self.hp}!')
+        return f'The dragon communes with its inner greed, and will cause doubled damage in its next attack!'

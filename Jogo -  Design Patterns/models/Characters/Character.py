@@ -2,11 +2,11 @@
 
 class Character:
 
-    def __init__(self, hp: int, damage: int, armor: int, mana: int):
+    def __init__(self, hp: int, damage: int, armor: int):
         self.hp = hp
         self.damage = damage
         self.armor = armor
-        self.mana = mana
+        self.mana = 0
     
     def attack(self, target):
         pass
@@ -14,5 +14,5 @@ class Character:
     def heal(self):
         pass
 
-    def special(self, target):
+    def special(self, target=0):
         pass
